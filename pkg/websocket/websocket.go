@@ -1,6 +1,7 @@
 package websocket
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -25,6 +26,10 @@ func Handle(c *gin.Context) {
 		return
 	}
 
+	if err = conn.WriteMessage(1, []byte("Welcome to the World Seed! Please Enter Your Name.")); err != nil {
+		return
+	}
+
 	for {
 		msgType, msgData, err := conn.ReadMessage()
 		if err != nil {
@@ -40,6 +45,7 @@ func Handle(c *gin.Context) {
 
 		// Skip binary messages
 		if msgType != websocket.TextMessage {
+			fmt.Println(msgData)
 			continue
 		}
 
