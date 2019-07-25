@@ -18,7 +18,7 @@ var (
 	}
 )
 
-func handleWebsocket(c *gin.Context) {
+func Handle(c *gin.Context) {
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		log.Println("cant upgrade connection:", err)
@@ -42,16 +42,11 @@ func handleWebsocket(c *gin.Context) {
 		if msgType != websocket.TextMessage {
 			continue
 		}
+
 		if err = conn.WriteMessage(msgType, msgData); err != nil {
 			return
 		}
 
 		log.Printf("incoming message: %s\n", msgData)
 	}
-}
-
-func main() {
-	router := gin.Default()
-	router.GET("/websocket", handleWebsocket)
-	router.Run(":5000")
 }
